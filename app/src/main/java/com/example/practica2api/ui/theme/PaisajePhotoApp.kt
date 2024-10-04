@@ -1,6 +1,7 @@
 package com.example.practica2api.ui.theme
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -22,27 +23,34 @@ import com.example.practica2api.viewmodel.PaisajeViewModel
 @Composable
 fun PaisajeApp(){
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    Scaffold (
+    Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { PaisajeBar(scrollBehavior = scrollBehavior)}
-    ){
-        Surface (
-            modifier = Modifier.fillMaxSize()
+        topBar = { PaisajeBar(scrollBehavior = scrollBehavior) }
+    ) { innerPadding ->
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding) // Asegura que el padding interno es respetado
         ) {
-            val paisajeViewModel: PaisajeViewModel = viewModel ()
-            HomeScreen(paisajeUiState = paisajeViewModel.paisajeUiState, contentPadding = it)
+            val paisajeViewModel: PaisajeViewModel = viewModel()
+            HomeScreen(
+                paisajeUiState = paisajeViewModel.paisajeUiState,
+                contentPadding = innerPadding
+            )
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PaisajeBar(scrollBehavior: TopAppBarScrollBehavior,modifier:Modifier = Modifier){
+fun PaisajeBar(scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier = Modifier){
     CenterAlignedTopAppBar(
         title = {
-        Text(
-            text = stringResource(id = R.string.paisajeapp),
-            style = MaterialTheme.typography.headlineMedium)
-    })
+            Text(
+                text = stringResource(id = R.string.paisajeapp),
+                style = MaterialTheme.typography.headlineMedium
+            )
+        },
+        scrollBehavior = scrollBehavior
+    )
 }

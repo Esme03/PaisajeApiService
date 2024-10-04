@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Practica2API</string>
+    <string name="app_name">PaisajePhotoApp</string>
     <string name="paisajeapp">PaisajeApp</string>
     <string name="paisaje_image">paisaje_image</string>
     <string name="problem_with_connection">problem_with_connection</string>

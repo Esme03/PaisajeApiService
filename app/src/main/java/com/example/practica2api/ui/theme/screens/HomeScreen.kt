@@ -37,9 +37,13 @@ fun HomeScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     when (paisajeUiState) { // Corregido para usar la instancia
-        is PaisajeUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-        is PaisajeUiState.Success -> PhotosGridScreen(photos = paisajeUiState.photos)
-        is PaisajeUiState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
+        is PaisajeUiState.Loading -> LoadingScreen(modifier = Modifier.fillMaxSize())
+        is PaisajeUiState.Success -> PhotosGridScreen(
+            photos = paisajeUiState.photos,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = contentPadding
+        )
+        is PaisajeUiState.Error -> ErrorScreen(modifier = Modifier.fillMaxSize())
     }
 }
 
@@ -51,7 +55,9 @@ fun PhotosGridScreen(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(200.dp),
-        modifier = modifier.padding(horizontal = 4.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 4.dp),
         contentPadding = contentPadding
     ) {
         items(
@@ -60,7 +66,7 @@ fun PhotosGridScreen(
         ) { photo ->
             PaisajePhotoCard(
                 photo = photo,
-                modifier = modifier
+                modifier = Modifier
                     .padding(4.dp)
                     .fillMaxWidth()
                     .aspectRatio(1.5f)
@@ -122,12 +128,27 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    Surface(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        // Puedes agregar una previsualización de HomeScreen aquí si lo deseas
+    // Asegúrate de usar el tema correcto
+        Surface(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // Crear una lista de fotos de muestra para la previsualización
+            val samplePhotos = List(10) { index ->
+                PaisajePhoto(
+                    id = index.toString(),
+                    author = "Autor $index",
+                    width = 2000,
+                    height = 1500,
+                    url = "https://unsplash.com/photos/$index",
+                    download_url = "https://picsum.photos/id/${index + 1}/200/300"
+                )
+            }
+            HomeScreen(
+                paisajeUiState = PaisajeUiState.Success(samplePhotos)
+            )
+        }
     }
-}
+
