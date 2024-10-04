@@ -12,7 +12,7 @@ import java.io.IOException
 
 sealed interface PaisajeUiState {
     data class Success(val photos: List<PaisajePhoto>) : PaisajeUiState
-    object Error : PaisajeUiState
+    data class Error(val message: String) : PaisajeUiState // Añadir mensaje de error
     object Loading : PaisajeUiState
 }
 
@@ -26,11 +26,11 @@ class PaisajeViewModel : ViewModel() {
 
     private fun getPaisajePhotos() {
         viewModelScope.launch {
-            paisajeUiState = try {
+            try {
                 val listResult = PaisajeApi.retrofitService.getPhotos()
-                PaisajeUiState.Success(listResult)
-            } catch (e: IOException) {
-                PaisajeUiState.Error
+                paisajeUiState = PaisajeUiState.Success(listResult)
+            } catch (e: Exception) { // Capturar todas las excepciones
+                paisajeUiState = PaisajeUiState.Error(e.localizedMessage ?: "Error desconocido")
             }
         }
     }
